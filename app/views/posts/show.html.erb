@@ -1,0 +1,77 @@
+<h2><%= @post.title %></h2>
+<ul class="list-group">
+    <li class="list-group-item">
+        <p class="fw-lighter">Beschreibung:</p>
+        <p>
+            <%= @post.description %>
+        <p>
+    </li>
+    <li class="list-group-item">
+        <p class="fw-lighter">Marktsegment:</p>
+        <p>
+            <%= @post.marktsegment %>
+        <p>
+    </li>
+    <li class="list-group-item">
+        <p class="fw-lighter">Benötigte Hilfe:</p>
+        <p>
+            <%= @post.help %>
+        <p>
+    </li>
+    <li class="list-group-item mb-3">
+        <p class="fw-lighter">Tags:</p>
+        <p>
+            <%= @post.keywords %>
+        <p>
+    </li>
+</ul>
+<%= link_to 'Pitch editieren', edit_post_path(@post), class: "btn btn-primary mb-5"%>
+
+
+<h3> Kommentiere meinen Pitch </h3>
+<div class="form-group">
+    <%= form_for [@post, Comment.new] do |f| %>
+        <div class="mb-3 row">
+            <div class="col-6">
+                <div>
+                    <%= f.label :text, class: "form-label"%>
+                    <%= f.text_area :text, class: "form-control"  %>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <div class="col-6">
+                <div>
+                    <%= f.label :name, class: "form-label"%>
+                    <%= f.text_field :name, class: "form-control"  %>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <div class="col-6">
+                <div>
+                    <%= f.label :email, class: "form-label"%>
+                    <%= f.email_field :email, class: "form-control" %>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <div class="col-6">
+                <div>
+                    <%= f.submit "Kommentar erstellen", class:"btn btn-primary" %>
+                </div>
+            </div>
+        </div>
+</div>
+<% end %>
+
+
+<h3 class="mt-5">Kommentare</h3>
+<ul class="list-group"> 
+    <% @post.comments.order(created_at: :desc).each do | comment | %>
+        <li class="list-group-item mb-5">
+            <%= comment.text %>
+            <p>Eine E-mail schreiben an: <%= link_to comment.name, "mailto:#{comment.email}" %></p>
+            <p><%= link_to 'Kommentar Löschen', post_comment_path(@post, comment), method: 'DELETE', class: "btn btn-outline-primary" %><p>
+        </li>
+<% end %>
